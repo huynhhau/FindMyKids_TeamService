@@ -24,6 +24,11 @@ namespace FindMyKids.TeamService
 			repository = repo;
 			secret = appOptions.Value.Secret;
 			reCaptcha = appOptions.Value.ReCaptcha;
+			//test docker
+			Console.WriteLine("aaaaa");
+
+
+
 		}
 
 		//public MembersController(IMemberRepository repo, AppSettings appOptions)
