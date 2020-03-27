@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">  
+  
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>FindMyKids.TeamService</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <StartupObject>FindMyKids.TeamService.Program</StartupObject>    
+  </PropertyGroup>
+  
+  <ItemGroup>   
+    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />   
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />   
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.2" />
+    <PackageReference Include="Elasticsearch.Net" Version="7.6.0" />
+    <PackageReference Include="NEST" Version="7.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.2.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
