@@ -7,6 +7,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -281,6 +284,62 @@ namespace FindMyKids.TeamService
 		//	//	}
 		//	//}
 		//	return Guid.Empty;
-		//}    
+		//}
+
+		[HttpPut]
+		// Owr dang body ko can dinh nghia o day, neu la dangj param thi 2 cai ten phai trung nhau
+		// ok
+		// url: localhost/Members/09348324238957
+		[Route("/[controller]/{memberId}")]		
+		public virtual IActionResult AddPlan (string memberId, [FromBody] plan obj)
+		{
+			repository.AddPlan(memberId, obj);
+			return this.Ok();
+		}
+
+		[HttpGet]
+		[EnableCors("_myAllowSpecificOrigins")]
+		[Route("/[controller]/{planId}")]
+		public virtual void AddPlanId(string planId)
+		{
+			getPlanUseId(planId);
+		}
+
+		public void getPlanUseId(string planId )
+		{
+			string url = "https://api.sandbox.paypal.com/v1/billing/plans/"+planId;
+			HttpMessageHandler handler = new HttpClientHandler()
+			{
+			};
+
+			var httpClient = new HttpClient(handler)
+			{
+				BaseAddress = new Uri(url),
+				Timeout = new TimeSpan(0, 2, 0)
+			};
+
+			httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+
+			//This is the key section you were missing    
+			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes("AZougqOyKucRxBRb-R6xthxmwf6EyV9PjUUsSgA7BpvLHQ8MQ9JOcygThdXyIjRhXFnOU7uHJzi8INex" +
+				":ENAkb0zTWYTSVWueVjfwisrvnYqUHJ-KyqMVC83UGCRtgv5cLJ1kM66O2foK19RuPDx2lWc6T44j9p_o");
+			string val = System.Convert.ToBase64String(plainTextBytes);
+			httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + val);
+
+			var method = new HttpMethod("GET");
+
+			HttpResponseMessage response = httpClient.GetAsync(url).Result;
+			string content = string.Empty;
+
+			using (StreamReader stream = new StreamReader(response.Content.ReadAsStreamAsync().Result)) 
+			{
+				content = stream.ReadToEnd();
+			}
+
+
+		}
+
+
+
 	}
 }

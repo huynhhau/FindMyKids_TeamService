@@ -13,5 +13,7 @@ namespace FindMyKids.FamilyService.Persistence
         bool Update(MemberInfo member);
         //bool UpdateLogout(MemberInfo member);
         Member Delete(Guid id);
+        bool AddPlan(string id, plan obj);
+        plan getPlan(string idPlan);
     }
 }
