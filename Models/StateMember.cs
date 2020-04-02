@@ -14,6 +14,6 @@
 
     public class PageInfo
     {
-        public readonly static int PerPage = 20;
+        public readonly static int PerPage = 15;
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,10 +15,11 @@ namespace FindMyKids.TeamService.Models
         [MinLength(8)]
         [MaxLength(16)]
         public string PassWord { get; set; }
-        [Required(AllowEmptyStrings = false)]
-        [MinLength(8)]
-        [MaxLength(16)]
-        public string Email { get; set; }
+        // Đổi tên đăng nhập thành email 01.04.2020
+        //[Required(AllowEmptyStrings = false)]
+        //[MinLength(8)]
+        //[MaxLength(16)]
+        //public string Email { get; set; }
         [Required(AllowEmptyStrings = false)]
         [MaxLength(100)]
         public string Name { get; set; }

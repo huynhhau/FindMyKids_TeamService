@@ -1,4 +1,4 @@
-using FindMyKids.FamilyService.Persistence;
+﻿using FindMyKids.FamilyService.Persistence;
 using FindMyKids.TeamService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Linq;
 
 namespace FindMyKids.TeamService
 {
@@ -24,9 +26,6 @@ namespace FindMyKids.TeamService
 			repository = repo;
 			secret = appOptions.Value.Secret;
 			reCaptcha = appOptions.Value.ReCaptcha;
-
-
-
 		}
 
 		//public MembersController(IMemberRepository repo, AppSettings appOptions)
@@ -61,7 +60,7 @@ namespace FindMyKids.TeamService
 			//}
 
 			MemberInfo member = repository.Get(auth);
-			if (member != null && BCrypt.Net.BCrypt.Verify(auth.PassWord, member.PassWord))
+			if (member != null && BCrypt.Net.BCrypt.Verify(auth.PassWord, member.PassWord) && member.State == "true") // Trạng thái active mới đăng nhập được
 			{
 				// authentication successful so generate jwt token
 				var tokenHandler = new JwtSecurityTokenHandler();
@@ -199,19 +198,17 @@ namespace FindMyKids.TeamService
 			return this.NotFound();
 		}
 
-		//[HttpGet]
-		//public virtual IActionResult GetMembers(Guid teamID) 
-		//{
-		//	//Team team = repository.Get(teamID);
-
-		//	//if(team == null) {
-		//	//	return this.NotFound();
-		//	//} else {
-		//	//	return this.Ok(team.Members);
-		//	//}
-		//	return this.NotFound();
-		//}
-
+		[HttpGet]
+		[Route("/members/{memberID}/{count}")]
+		public List<child> GetChildrens(Guid memberID, int count)
+		{
+			List<child> children = repository.GetChildrens(memberID);
+			if (children != null)
+			{
+				return children.OrderBy(o => o.DateAdd).Skip(count).ToList();
+			}
+			return new List<child>();
+		}
 
 		//[HttpGet]
 		//[Route("/teams/{teamId}/[controller]/{memberId}")]		
@@ -281,6 +278,8 @@ namespace FindMyKids.TeamService
 		//	//	}
 		//	//}
 		//	return Guid.Empty;
-		//}    
+		//}
+
+
 	}
 }

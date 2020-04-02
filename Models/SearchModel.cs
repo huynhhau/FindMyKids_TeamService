@@ -17,5 +17,7 @@ namespace FindMyKids.TeamService.Models
         public string Type { get; set; }
         [Required]
         public int Page { get; set; }
+        public DateTime? DateCreateFrom { get; set; }
+        public DateTime? DateCreateTo { get; set; }
     }
 }

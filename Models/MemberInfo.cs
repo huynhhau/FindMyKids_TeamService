@@ -15,6 +15,7 @@ namespace FindMyKids.TeamService.Models
         public string RefreshToken { get; set; }
         public string Date { get; set; }
         public string Duedate { get; set; }
+        public string PasswordConnect { get; set; }
         public List<plan> plans { get; set; }
         public List<child> children { get; set; }
     }
@@ -41,5 +42,8 @@ namespace FindMyKids.TeamService.Models
     {
         public string id { get; set; }
         public string name { get; set; }
+        public DateTime? DateAdd { get; set; }
+        public double? lat { get; set; }
+        public double? lon { get; set; }
     }
 }

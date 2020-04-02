@@ -19,12 +19,27 @@ namespace FindMyKids.TeamService.Controllers
         }
 
 		[AllowAnonymous]
-		[HttpGet]
+		[HttpPost]
 		[EnableCors("_myAllowSpecificOrigins")]
 		[Route("/[controller]/manager/members")]
-		public virtual IActionResult getList()
+		public virtual IActionResult getList([FromBody]SearchModel searchModel, [FromQuery]int page)
 		{
-			return this.Ok(repository.Get(new SearchModel()));
+			int total = 0;
+			List<MemberInfo> memberInfos = repository.Get(searchModel, page, ref total);
+			return this.Ok(new
+			{
+				total = total,
+				memberInfos = memberInfos
+			}) ;
+		}
+
+		[AllowAnonymous]
+		[HttpPost]
+		[EnableCors("_myAllowSpecificOrigins")]
+		[Route("/[controller]/manager/members/updatestate/{memberId}/{state}")]
+		public bool updateState(string memberId, string state)
+		{
+			return repository.UpdateState(memberId, state);
 		}
 	}
 }
