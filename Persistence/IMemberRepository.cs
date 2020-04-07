@@ -18,5 +18,6 @@ namespace FindMyKids.FamilyService.Persistence
         Member Delete(Guid id);
         List<child> GetChildrens(Guid MemberId);
         bool UpdateState(string MemberId, string state);
+        bool AddPlan(string id, plan obj);
     }
 }

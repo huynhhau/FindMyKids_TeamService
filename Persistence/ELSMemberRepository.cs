@@ -49,6 +49,28 @@ namespace FindMyKids.FamilyService.Persistence
             return null;
         }
 
+        public bool AddPlan(string id, plan obj)
+        {
+            IUpdateResponse<Member> update_plan = client.Update<Member>(id, u => u
+                                  .Script(s => s
+                                      .Source("ctx._source.plans.add(params.plan)")
+                                      .Params(p => p
+                                          .Add("plan", new plan
+                                          {
+                                              id = obj.id,
+                                              name = obj.name,
+                                              status = obj.status,
+                                              description = obj.description,
+                                              create_time = obj.create_time,
+                                              price = obj.price,
+                                              links = obj.links
+                                          })
+                                      )
+                                  )
+                                  .Refresh(Refresh.True));
+            return update_plan.IsValid;
+        }
+
         public Member Delete(Guid id)
         {
             throw new NotImplementedException();
