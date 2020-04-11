@@ -13,6 +13,7 @@ using System.Text;
 using System.Linq;
 using System.Net.Http;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace FindMyKids.TeamService
 {
@@ -293,9 +294,10 @@ namespace FindMyKids.TeamService
 		[HttpGet]
 		[EnableCors("_myAllowSpecificOrigins")]
 		[Route("/[controller]/{planId}")]
-		public virtual void AddPlanId(string planId)
+		public virtual IActionResult AddPlanId(string planId)
 		{
 			getPlanUseId(planId);
+			return this.Ok();
 		}
 
 		public void getPlanUseId(string planId)
@@ -328,7 +330,35 @@ namespace FindMyKids.TeamService
 			{
 				content = stream.ReadToEnd();
 			}
+			JObject o = JObject.Parse(content);
+			plan obj = new plan();
+			obj.id = (string) o["id"];
+			obj.name = (string) o["name"];
+			obj.status = (string) o["status"];
+			obj.description = (string) o["description"];
+			obj.create_time = (string)o["billing_cycles"][0]["pricing_scheme"]["create_time"];
+			obj.price = (string) o["billing_cycles"][0]["pricing_scheme"]["fixed_price"]["value"];
 
+			link linkGet = new link();
+			obj.links = new List<link>();
+			linkGet.href = (string) o["links"][0]["href"];
+			linkGet.rel = (string) o["links"][0]["rel"];
+			linkGet.method = (string) o["links"][0]["method"];						
+			obj.links.Add(linkGet);
+
+			link linkPatch = new link();
+			linkPatch.href = (string) o["links"][1]["href"];
+			linkPatch.rel = (string) o["links"][1]["rel"];
+			linkPatch.method = (string) o["links"][1]["method"];
+			obj.links.Add(linkPatch);
+
+			link linkPost = new link();
+			linkPost.href = (string) o["links"][2]["href"];
+			linkPost.rel = (string) o["links"][2]["rel"];
+			linkPost.method = (string) o["links"][2]["method"];
+			obj.links.Add(linkPost);
+
+			repository.AddPlan("1",obj);
 
 		}
 
